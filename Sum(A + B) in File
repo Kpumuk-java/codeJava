@@ -1,0 +1,112 @@
+import java.io.*;
+import java.util.Scanner;
+
+public class Task2 {
+    private static int NUMBER1, NUMBER2;
+    private static int check = 0;
+    private static String[] bufferString;
+    private static String inputString;
+    //private static Scanner scanner;
+
+
+    private static void enterTheValue () throws IOException {
+
+
+        //FileInputStream file = new FileInputStream("D:\\input.txt");
+        //BufferedInputStream inputString = new BufferedInputStream(file, 100);
+
+        FileInputStream inStream = new FileInputStream("D:\\input.txt");
+
+        Scanner scanner = new Scanner(inStream);
+        while (scanner.hasNext()){
+            if (check == 0) {
+                inputString = scanner.nextLine();
+                check++;
+            } else break;
+        }
+
+        valueCheck(inputString);
+        addingNumbers();
+        outputAddingNumbers();
+        scanner.close();
+        
+    }
+
+    public static boolean valueCheck (String string) {
+        if (string.trim().isEmpty()) {
+            System.out.println("There are only void in string, enter the value again please.");
+            return true;
+        }
+
+        bufferString = inputString.trim().split(" ");
+
+        if (bufferString.length > 2) {
+            System.out.println("Entered more than 2 numbers");
+            return true;
+        }
+
+        if (bufferString.length < 2) {
+            System.out.println("Entered 1 numbers");
+            return true;
+        }
+
+        for (String s : bufferString) {
+            if (!checkString(s)) return true;
+        }
+        return false;
+    }
+
+    public static boolean checkString(String string){
+        char c;
+        if (string.charAt(0) == '-') {
+            for (int i = 1; i <= string.length() - 1; i++) {
+                c = string.charAt(i);
+                if (!(c >= '0' && c <= '9')) {
+                    return false;
+                }
+            }
+        } else {
+            for (int i = 0; i <= string.length() - 1; i++) {
+                c = string.charAt(i);
+                if (!(c >= '0' && c <= '9')) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public static boolean conditionNumber (Integer number) {
+        if (number <= -2000000000) {
+            System.out.println("One of the numbers does not match the problem condition");
+            return true;
+        } else if (number >= 2000000000) {
+            System.out.println("One of the numbers does not match the problem condition");
+            return true;
+        }
+        return false;
+    }
+
+    private static boolean addingNumbers () {
+        NUMBER1 = Integer.parseInt(bufferString[0]);
+        NUMBER2 = Integer.parseInt(bufferString[1]);
+        if (conditionNumber(NUMBER1)) return true;
+        else if (conditionNumber(NUMBER2)) return true;
+        return false;
+    }
+
+
+    private static void outputAddingNumbers () throws IOException {
+        FileOutputStream fileOutputStream = new FileOutputStream("D:\\output.txt");
+        String str = String.valueOf(NUMBER1 + NUMBER2);
+        fileOutputStream.write(str.getBytes());
+        fileOutputStream.close();
+    }
+
+    public static void main(String[] args) throws IOException {
+        long startTime = System.currentTimeMillis();
+        enterTheValue();
+        long timeSpent = System.currentTimeMillis() - startTime;
+        System.out.println("программа выполнялась " + timeSpent + " миллисекунд");
+    }
+}
